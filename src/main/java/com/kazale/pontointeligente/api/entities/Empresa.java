@@ -14,84 +14,87 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "empresa")
+@Table(name = "empresa", schema = "public")
 public class Empresa implements Serializable {
 
-	private static final long serialVersionUID = 3960436649365666213L;
-	
-	private Long id;
-	private String razaoSocial;
-	private String cnpj;
-	private Date dataCriacao;
-	private Date dataAtualizacao;
-	private List<Funcionario> funcionarios;
-	
-	public Empresa() {
-	}
+    private static final long serialVersionUID = 3960436649365666213L;
 
-	@Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-	public Long getId() {
-		return id;
-	}
+    private Long id;
+    private String razaoSocial;
+    private String cnpj;
+    private Date dataCriacao;
+    private Date dataAtualizacao;
+    private List<Funcionario> funcionarios;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Empresa() {
+    }
 
-	@Column(name = "razao_social", nullable = false)
-	public String getRazaoSocial() {
-		return razaoSocial;
-	}
+    @Id
+//    @GeneratedValue(strategy=GenerationType.AUTO)
+    @SequenceGenerator(name = "seq_empresa_id", sequenceName = "seq_empresa_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_empresa_id")
+    public Long getId() {
+        return id;
+    }
 
-	public void setRazaoSocial(String razaoSocial) {
-		this.razaoSocial = razaoSocial;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	@Column(name = "cnpj", nullable = false)
-	public String getCnpj() {
-		return cnpj;
-	}
+    @Column(name = "razao_social", nullable = false)
+    public String getRazaoSocial() {
+        return razaoSocial;
+    }
 
-	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
-	}
+    public void setRazaoSocial(String razaoSocial) {
+        this.razaoSocial = razaoSocial;
+    }
 
-	@Column(name = "data_criacao", nullable = false)
-	public Date getDataCriacao() {
-		return dataCriacao;
-	}
+    @Column(name = "cnpj", nullable = false)
+    public String getCnpj() {
+        return cnpj;
+    }
 
-	public void setDataCriacao(Date dataCriacao) {
-		this.dataCriacao = dataCriacao;
-	}
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
 
-	@Column(name = "data_atualizacao", nullable = false)
-	public Date getDataAtualizacao() {
-		return dataAtualizacao;
-	}
+    @Column(name = "data_criacao", nullable = false)
+    public Date getDataCriacao() {
+        return dataCriacao;
+    }
 
-	public void setDataAtualizacao(Date dataAtualizacao) {
-		this.dataAtualizacao = dataAtualizacao;
-	}
+    public void setDataCriacao(Date dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
 
-	@OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	public List<Funcionario> getFuncionarios() {
-		return funcionarios;
-	}
+    @Column(name = "data_atualizacao", nullable = false)
+    public Date getDataAtualizacao() {
+        return dataAtualizacao;
+    }
 
-	public void setFuncionarios(List<Funcionario> funcionarios) {
-		this.funcionarios = funcionarios;
-	}
-	
-	@PreUpdate
+    public void setDataAtualizacao(Date dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
+
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    public List<Funcionario> getFuncionarios() {
+        return funcionarios;
+    }
+
+    public void setFuncionarios(List<Funcionario> funcionarios) {
+        this.funcionarios = funcionarios;
+    }
+
+    @PreUpdate
     public void preUpdate() {
         dataAtualizacao = new Date();
     }
-     
+
     @PrePersist
     public void prePersist() {
         final Date atual = new Date();
@@ -99,9 +102,9 @@ public class Empresa implements Serializable {
         dataAtualizacao = atual;
     }
 
-	@Override
-	public String toString() {
-		return "Empresa [id=" + id + ", razaoSocial=" + razaoSocial + ", cnpj=" + cnpj + ", dataCriacao=" + dataCriacao
-				+ ", dataAtualizacao=" + dataAtualizacao + "]";
-	}
+    @Override
+    public String toString() {
+        return "Empresa [id=" + id + ", razaoSocial=" + razaoSocial + ", cnpj=" + cnpj + ", dataCriacao=" + dataCriacao
+                + ", dataAtualizacao=" + dataAtualizacao + "]";
+    }
 }
